@@ -1,4 +1,4 @@
-import {useState, useRef, useCallback} from 'react';
+import { useState, useRef, useCallback } from 'react';
 import TodoTemplate from './components/TodoTemplate';
 import TodoInsert from './components/TodoInsert';
 import TodoList from './components/TodoList';
@@ -39,23 +39,36 @@ const App = () => {
       nextId.current += 1; //nextId 1씩 더하기
     },
     [todos], //todos 가 바뀌면 함수 생성
-  )
+  );
 
   // id를 받아와서 todos 배열에서 지우는 함수
   // 배열의 불변성을 지키면서 배열 원소를 제거하는 filter 함수 사용
   const onRemove = useCallback(
-    id=>{
+    id => {
       setTodos(todos.filter(todo => todo.id !== id)); // filter의 파라미터는 boolean을 return 해야 함. true인 경우에만 새로운 배열에 포함.
     },
     [todos],
   );
 
-  return(
+  // 특정 id를 가진 객체의 checked 값을 반전시켜주는(수정) 함수
+  // 불변성을 유지하면서 특정 배열 원소를 업데이트하는 map 함수 사용 (새로 생긴 배열은 변화가 필요한 원소만 업데이트되고 나머지는 그대로 남아있음)
+  const onToggle = useCallback(
+    id => {
+      setTodos(
+        todos.map(todo =>
+          todo.id === id ? { ...todo, checked: !todo.checked } : todo, /* todo.id와 파라미터로 받은 id가 같으면 checked 값 반전 */
+        ),
+      );
+    },
+    [todos],
+  );
+
+  return (
     <TodoTemplate>
-      <TodoInsert onInsert={onInsert}/>
-      <TodoList todos={todos} onRemove={onRemove}/>
+      <TodoInsert onInsert={onInsert} />
+      <TodoList todos={todos} onRemove={onRemove} onToggle={onToggle} />
     </TodoTemplate>
-  )
-}
+  );
+};
 
 export default App;
