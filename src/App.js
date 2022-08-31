@@ -40,10 +40,20 @@ const App = () => {
     },
     [todos], //todos 가 바뀌면 함수 생성
   )
+
+  // id를 받아와서 todos 배열에서 지우는 함수
+  // 배열의 불변성을 지키면서 배열 원소를 제거하는 filter 함수 사용
+  const onRemove = useCallback(
+    id=>{
+      setTodos(todos.filter(todo => todo.id !== id)); // filter의 파라미터는 boolean을 return 해야 함. true인 경우에만 새로운 배열에 포함.
+    },
+    [todos],
+  );
+
   return(
     <TodoTemplate>
       <TodoInsert onInsert={onInsert}/>
-      <TodoList todos={todos}/>
+      <TodoList todos={todos} onRemove={onRemove}/>
     </TodoTemplate>
   )
 }

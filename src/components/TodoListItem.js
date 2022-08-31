@@ -8,8 +8,8 @@ import './TodoListItem.scss';
 
 // 각 할 일 항목에 대한 정보를 보여주는 컴포넌트
 // todo 객체를 props로 받아와서 상태에 따라 다른 스타일의 UI를 보여줌
-const TodoListItem= ( {todo}) => {
-  const {text, checked} = todo;
+const TodoListItem= ( {todo, onRemove}) => {
+  const {id, text, checked} = todo;
 
   return(
     <div className="TodoListItem">
@@ -17,7 +17,7 @@ const TodoListItem= ( {todo}) => {
         {checked? <MdCheckBox /> : <MdCheckBoxOutlineBlank />}
         <div className={"text"}>{text}</div>
       </div>
-      <div className={"remove"}>
+      <div className={"remove"} onClick={() => onRemove(id)}>
         <MdRemoveCircleOutline />
       </div>
     </div>
